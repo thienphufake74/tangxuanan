@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gửi Xuân An · 20/10</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500&family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap" rel="stylesheet">
+<style>
+:root{--p1:#e86aa8;--p2:#ff9ccb;--gold:#ffc85e;--leaf:#4fa58a;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#12061a}
+body{background:radial-gradient(120% 90% at 50% 25%,#431552 0%,#1d0b24 62%,#10051a 100%);color:#fff0f7;font:400 17px/1.5 "Be Vietnam Pro",system-ui,sans-serif}
+#cv{position:fixed;inset:-12%;width:124%;height:124%;z-index:0;will-change:transform}
+#cam{position:fixed;inset:0;z-index:2;display:grid;place-items:center;padding:24px;will-change:transform}
+#txt{text-align:center;position:relative;z-index:2;max-width:16em;opacity:0;transition:opacity .4s ease}
+#txt.top{align-self:start;margin-top:7vh}
+#bq{position:absolute;left:0;right:0;bottom:0;width:100%;height:54svh;z-index:1}
+#bq .stem{stroke-dasharray:320;stroke-dashoffset:320;transition:stroke-dashoffset 1800ms ease-out}
+#bq .p{transform:scale(0);transition:transform 1100ms cubic-bezier(.2,.9,.3,1.25)}
+#bq .core{transform:scale(0);transition:transform 700ms ease}
+#bq.on .stem{stroke-dashoffset:0}
+#bq.on .p,#bq.on .core{transform:scale(1)}
+/* type */
+.line{font:600 clamp(30px,7.6vw,62px)/1.22 Fraunces,Georgia,serif}
+.lil{font:500 clamp(18px,4.4vw,28px)/1.4 "Be Vietnam Pro",sans-serif;color:var(--p2);letter-spacing:.02em}
+.huge{font:800 clamp(54px,17vw,140px)/1 Fraunces,Georgia,serif;color:#ffe3f0;text-shadow:0 0 30px var(--p1),0 0 70px #b5368f}
+.num{position:relative;font:800 clamp(88px,28vw,230px)/1 Fraunces,Georgia,serif;color:#ffe3f0;text-shadow:0 0 30px var(--p1),0 0 80px #b5368f;animation:beat 1.1s ease-in-out infinite}
+@keyframes beat{50%{transform:scale(1.06)}}
+.ring{position:absolute;left:50%;top:50%;width:30vmin;height:30vmin;margin:-15vmin 0 0 -15vmin;border:2px solid var(--p2);border-radius:50%;opacity:0;animation:rg 2.4s ease-out infinite}
+.r2{animation-delay:.8s}.r3{animation-delay:1.6s}
+@keyframes rg{0%{transform:scale(.3);opacity:.9}100%{transform:scale(3.4);opacity:0}}
+.w{display:inline-block;opacity:0;filter:blur(12px);transform:translate(var(--dx,0),var(--dy,14px)) scale(var(--sc,1));animation:in 900ms cubic-bezier(.2,.8,.2,1) forwards;margin:0 .13em}
+@keyframes in{to{opacity:1;filter:blur(0);transform:none}}
+.dl{--dx:-90px;--dy:0}.dr{--dx:90px;--dy:0}.up{--dy:60px}.zoom{--sc:2.4;--dy:0}
+.fin{animation:sway 7s ease-in-out infinite alternate}
+@keyframes sway{from{transform:perspective(900px) rotateY(-9deg) rotateX(2deg)}to{transform:perspective(900px) rotateY(9deg) rotateX(-2deg)}}
+.big{margin:12px 0 0;font:800 clamp(42px,12vw,92px)/1.04 Fraunces,Georgia,serif;text-shadow:0 0 30px rgba(232,106,168,.75)}
+.big span{display:block}
+.by{color:#e6bde0;margin-top:10px}
+/* overlays */
+#vig{position:fixed;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.55) 100%)}
+.bx{position:fixed;left:0;right:0;height:7svh;background:#000;z-index:4;transition:transform 1.2s ease}
+.bx.t{top:0;transform:translateY(-100%)}.bx.b{bottom:0;transform:translateY(100%)}
+.cine .bx{transform:none}
+#flash{position:fixed;inset:0;z-index:5;background:#ffe3f0;opacity:0;pointer-events:none}
+#flash.go{animation:fl .6s ease-out}
+@keyframes fl{from{opacity:.85}to{opacity:0}}
+#bar{position:fixed;top:0;left:0;height:3px;width:100%;background:var(--p2);transform:scaleX(0);transform-origin:0 50%;z-index:6}
+#again{position:fixed;top:14px;right:14px;z-index:7;font:500 15px "Be Vietnam Pro",sans-serif;color:#fff0f7;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:8px 18px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .8s}
+.done #again{opacity:1;pointer-events:auto}
+#again:hover{background:rgba(255,255,255,.15)}
+#again:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){.w{animation-duration:1ms;filter:none}.num,.fin,.ring{animation:none}#bq .stem,#bq .p,#bq .core{transition:none}}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div id="cam">
+  <svg id="bq" viewBox="0 0 400 300" preserveAspectRatio="xMidYMax meet" aria-hidden="true"></svg>
+  <div id="txt" aria-live="polite"></div>
+</div>
+<div id="vig"></div>
+<div class="bx t"></div><div class="bx b"></div>
+<div id="flash"></div>
+<div id="bar"></div>
+<button id="again" type="button">Xem lại</button>
+
+<script>
+const $=id=>document.getElementById(id);
+const NAME="Xuân An", FROM="Cà Rốt";
+const still=matchMedia("(prefers-reduced-motion:reduce)").matches;
+const R=(a,b)=>a+Math.random()*(b-a), PICK=a=>a[Math.random()*a.length|0];
+const cv=$("cv"), c=cv.getContext("2d"), cm=$("cam"), txt=$("txt"), bq=$("bq");
+let W,H,P=[],fx={},T=0,run=0;
+const pc=["#e86aa8","#ff9ccb","#f7b6d6","#ffc85e","#ff7fb6"];
+const STARS=Array.from({length:90},()=>({x:Math.random(),y:Math.random(),r:R(1,2.4),p:R(0,6.3)}));
+
+/* ---------- particles ---------- */
+function size(){const d=devicePixelRatio||1;W=cv.clientWidth;H=cv.clientHeight;cv.width=W*d;cv.height=H*d;c.setTransform(d,0,0,d,0,0)}
+addEventListener("resize",size); size();
+function add(o){if(P.length<650)P.push({x:0,y:0,vx:0,vy:0,g:0,f:1,l:0,m:100,s:2,col:"#fff",r:0,vr:0,ph:R(0,6.3),t:"pet",...o})}
+function burst(x,y,n,col){for(let i=0;i<n;i++){const a=R(0,6.283),v=R(1,6.5);add({t:"spk",x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,g:.05,f:.975,m:R(55,95),s:R(1.5,3),col:col||PICK(pc)})}}
+function emit(){
+  const k=still?.3:1;
+  if(Math.random()<(fx.pet||0)*k)add({t:"pet",x:R(0,W),y:-20,vx:R(-.5,.5),vy:R(1,2.6),vr:R(-.05,.05),s:R(5,11),col:PICK(pc),m:900});
+  if(Math.random()<(fx.hrt||0)*k)add({t:"hrt",x:R(0,W),y:H+20,vx:R(-.4,.4),vy:R(-2.8,-1.2),s:R(7,16),col:PICK(["#ff5c9a","#ff9ccb","#e86aa8"]),m:900});
+  if(Math.random()<(fx.bok||0)*k)add({t:"bok",x:R(0,W),y:R(0,H),vx:R(-.3,.3),vy:R(-.4,.1),s:R(20,60),col:PICK(pc),m:260});
+  if(Math.random()<(fx.str||0)*k)add({t:"str",x:R(0,W*.7),y:R(0,H*.35),vx:R(9,15),vy:R(3,6),m:40,s:2});
+  if(fx.fire&&Math.random()<.025*k)burst(R(W*.15,W*.85),R(H*.1,H*.45),70);
+}
+function frame(){
+  c.globalCompositeOperation="source-over";c.clearRect(0,0,W,H);c.fillStyle="#fff";
+  for(const s of STARS){c.globalAlpha=.25+.5*Math.abs(Math.sin(T*.02+s.p));c.fillRect(s.x*W,s.y*H,s.r,s.r)}
+  emit();
+  for(const p of P){
+    p.px=p.x;p.py=p.y;p.vx*=p.f;p.vy=p.vy*p.f+p.g;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;p.l++;
+    if(p.t==="pet"||p.t==="hrt")p.x+=Math.sin(p.l*.035+p.ph)*.7;
+    const k=p.l/p.m; if(k>=1||p.y>H+40||(p.y<-60&&p.t==="hrt"))p.dead=1;
+    c.save();
+    if(p.t==="pet"){c.globalAlpha=.8;c.translate(p.x,p.y);c.rotate(p.r);c.fillStyle=p.col;c.beginPath();c.ellipse(0,0,p.s,p.s*.5*(.4+.6*Math.abs(Math.cos(p.l*.04+p.ph))),0,0,6.283);c.fill()}
+    else if(p.t==="hrt"){c.globalAlpha=.85;c.translate(p.x,p.y);c.scale(p.s/10,p.s/10);c.fillStyle=p.col;c.beginPath();c.moveTo(0,4);c.bezierCurveTo(-10,-4,-5,-12,0,-6);c.bezierCurveTo(5,-12,10,-4,0,4);c.fill()}
+    else{
+      c.globalCompositeOperation="lighter";
+      if(p.t==="bok"){c.globalAlpha=.16*Math.sin(Math.PI*k);c.fillStyle=p.col;c.beginPath();c.arc(p.x,p.y,p.s,0,6.283);c.fill()}
+      else{const q=p.t==="str"?5:0;c.globalAlpha=1-k;c.strokeStyle=p.col;c.lineWidth=p.s;c.lineCap="round";c.beginPath();c.moveTo(p.px-p.vx*q,p.py-p.vy*q);c.lineTo(p.x,p.y);c.stroke()}
+    }
+    c.restore();
+  }
+  P=P.filter(p=>!p.dead);T++;requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* ---------- camera ---------- */
+const Pz=([x,y,s,rz,rx,ry])=>`perspective(1000px) translate3d(${x}px,${y}px,0) rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${rz}deg) scale(${s})`;
+const cvT=b=>`translate(${-b[0]*.25}px,${-b[1]*.25}px) scale(${1+(b[2]-1)*.3}) rotate(${b[3]*.4}deg)`;
+function move(b,d,e){
+  const tr=still?"none":`transform ${d}ms ${e||"cubic-bezier(.45,.05,.25,1)"}`;
+  cm.style.transition=tr;cv.style.transition=tr;cm.style.transform=Pz(b);cv.style.transform=cvT(b);
+}
+function cam(a,b,d,e){
+  cm.style.transition="none";cv.style.transition="none";cm.style.transform=Pz(a);cv.style.transform=cvT(a);cm.offsetWidth;move(b,d,e);
+}
+function flash(){const f=$("flash");f.classList.remove("go");f.offsetWidth;f.classList.add("go")}
+
+/* ---------- bouquet ---------- */
+const NS="http://www.w3.org/2000/svg";
+function el(tag,a,par){const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);(par||bq).appendChild(e);return e}
+function flower(x,y,s,delay,f1,f2){
+  const st=el("path",{class:"stem",d:`M${x} ${y} C${x-10} ${y+90} ${x+10} ${y+150} ${x} 300`,stroke:"var(--leaf)","stroke-width":4,fill:"none","stroke-linecap":"round"});
+  st.style.transitionDelay=delay+"ms";
+  const g=el("g",{transform:`translate(${x} ${y}) scale(${s})`});
+  [[8,0,78,26,f1,0],[8,22.5,52,18,f2,200]].forEach(([n,off,len,wid,f,d])=>{
+    for(let i=0;i<n;i++){
+      const r=el("g",{transform:`rotate(${off+i*360/n})`},g);
+      const e=el("ellipse",{class:"p",cx:0,cy:-len,rx:wid,ry:len,fill:f},r);
+      e.style.transformOrigin="0 0";e.style.transitionDelay=(delay+1200+d+i*50)+"ms";
+    }
+  });
+  const co=el("circle",{class:"core",r:20,fill:"#ffc85e"},g);
+  co.style.transformOrigin="0 0";co.style.transitionDelay=(delay+1900)+"ms";
+}
+flower(30,205,.2,900,"#ff9ccb","#ffd6e8");
+flower(372,200,.2,1100,"#ff9ccb","#ffd6e8");
+flower(160,205,.22,800,"#ff7fb6","#ffc2dc");
+flower(245,208,.22,1000,"#e86aa8","#f7b6d6");
+flower(50,170,.26,500,"#d65aa0","#f7b6d6");
+flower(352,168,.26,700,"#d65aa0","#f7b6d6");
+flower(85,150,.32,300,"#e86aa8","#ff9ccb");
+flower(315,142,.34,600,"#d65aa0","#f7b6d6");
+flower(200,92,.42,0,"#ff7fb6","#ffc2dc");
+
+/* ---------- timeline ---------- */
+const Wd=(t,st=150)=>t.split(" ").map((w,i)=>`<span class="w" style="animation-delay:${i*st}ms">${w}</span>`).join(" ");
+const lil=t=>`<div class="lil">${Wd(t)}</div>`;
+const SC=[
+ {h:Wd("Gửi "+NAME+","),c:"zoom",a:[0,0,1.8,-5,0,0],b:[0,0,1,0,0,0],d:3800,f:{bok:.02,str:.04}},
+ {h:lil("Hôm nay là")+`<div class="num"><span class="w" style="animation-delay:500ms">20/10</span><i class="ring"></i><i class="ring r2"></i><i class="ring r3"></i></div>`,c:"",a:[0,0,.6,10,0,0],b:[0,0,1.12,-3,0,0],d:4200,f:{hrt:.04,bok:.03},x:()=>{flash();burst(W/2,H/2,100)}},
+ {h:`<div class="line">${Wd("Mình không giỏi nói những lời hoa mỹ.",200)}</div>`,c:"dl",a:[-140,0,1.15,0,0,14],b:[140,0,1.15,0,0,-14],d:4600,f:{bok:.06}},
+ {h:`<div class="line">${Wd("Nhưng mình luôn biết ơn vì "+NAME+" ở đây, trong cả những ngày bình thường nhất.",170)}</div>`,c:"up",a:[0,90,1,0,14,0],b:[0,-70,1.1,2,0,0],d:6200,f:{hrt:.1,bok:.03}},
+ {h:lil("Cảm ơn vì đã")+`<div class="huge">${Wd("kiên nhẫn")}</div>`,c:"zoom",a:[0,0,1.5,6,0,0],b:[0,0,1,0,0,0],d:1900,f:{pet:.2},x:flash},
+ {h:lil("Cảm ơn vì đã")+`<div class="huge">${Wd("mỉm cười")}</div>`,c:"dr",a:[-60,0,.8,-8,0,18],b:[0,0,1.05,0,0,0],d:1900,f:{pet:.3,hrt:.05},x:flash},
+ {h:lil("Cảm ơn vì đã")+`<div class="huge">${Wd("ở lại")}</div>`,c:"up",a:[0,80,1.7,0,-12,0],b:[0,0,1,0,0,0],d:1900,f:{pet:.4,hrt:.08},x:flash},
+ {h:`<div class="line">${Wd(NAME+" xứng đáng được trân trọng mỗi ngày, không chỉ hôm nay.",160)}</div>`,c:"zoom",a:[0,-90,.8,-6,10,0],b:[0,40,1.12,3,-4,0],d:5600,f:{pet:.7,hrt:.1}}
+];
+
+async function play(){
+  const id=++run, w=ms=>new Promise(r=>setTimeout(()=>r(id===run),ms)), B=document.body;
+  const bar=$("bar");bar.style.transition="none";bar.style.transform="scaleX(0)";bar.offsetWidth;
+  bar.style.transition="transform 42s linear";bar.style.transform="scaleX(1)";
+  B.classList.remove("done");B.classList.add("cine");
+  bq.classList.remove("on");txt.style.opacity=0;txt.className="";fx={};
+  if(!await w(900))return;
+  for(const s of SC){
+    fx=s.f;txt.className=s.c;txt.innerHTML=s.h;txt.style.opacity=1;cam(s.a,s.b,s.d+400);
+    if(s.x)s.x();
+    if(!await w(s.d))return;
+    txt.style.opacity=0;
+    if(!await w(450))return;
+  }
+  /* finale */
+  fx={pet:.25,hrt:.06,fire:1,bok:.03};B.classList.remove("cine");
+  bq.classList.add("on");cam([0,-150,2,0,12,0],[0,0,1,0,0,0],6500);
+  if(!await w(3600))return;
+  txt.className="top";
+  txt.innerHTML=`<div class="fin">${lil("Gửi "+NAME)}<h1 class="big"><span class="w" style="animation-delay:300ms">Chúc mừng</span><span class="w" style="animation-delay:700ms">20/10</span></h1><div class="by"><span class="w" style="animation-delay:1400ms">Từ ${FROM}</span></div></div>`;
+  txt.style.opacity=1;flash();burst(W/2,H*.3,120);burst(W*.25,H*.35,80);burst(W*.75,H*.35,80);
+  if(!await w(3200))return;
+  B.classList.add("done");
+  let s=true;
+  while(true){
+    move(s?[-30,-10,1.05,-1.5,3,-6]:[30,10,1.05,1.5,-3,6],9000,"ease-in-out");
+    if(!await w(9000))return; s=!s;
+  }
+}
+$("again").addEventListener("click",play);
+(document.fonts?document.fonts.ready:Promise.resolve()).then(()=>setTimeout(play,400));
+</script>
+</body>
+</html>
